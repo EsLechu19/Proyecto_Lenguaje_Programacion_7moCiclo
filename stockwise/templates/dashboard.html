@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - StockWise{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1>Dashboard</h1>
+    <p class="text-muted">Resumen general de tu inventario.</p>
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h6>Productos</h6>
+                <h2>{{ total_productos }}</h2>
+                <a href="{% url 'lista_productos' %}">Ver productos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h6>Entradas</h6>
+                <h2>{{ total_entradas }}</h2>
+                <a href="{% url 'lista_movimientos' %}">Ver movimientos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h6>Salidas</h6>
+                <h2>{{ total_salidas }}</h2>
+                <a href="{% url 'lista_movimientos' %}">Ver salidas</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h6>Alertas de Stock</h6>
+                <h2 class="text-danger">{{ productos_stock_bajo|length }}</h2>
+                <a href="#stock-bajo" class="text-danger">Ver alertas</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card dashboard-card mb-4">
+    <div class="card-body">
+        <h4 class="mb-4">Movimientos de inventario</h4>
+
+        <div style="height: 280px;">
+            <canvas id="movimientosChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-8">
+
+        <div class="card dashboard-card mb-4">
+            <div class="card-body">
+                <h4>Últimos movimientos</h4>
+
+                <table class="table table-hover align-middle mt-3">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for movimiento in ultimos_movimientos %}
+                        <tr>
+                            <td>{{ movimiento.producto.nombre }}</td>
+                            <td>
+                                {% if movimiento.tipo == 'ENTRADA' %}
+                                    <span class="badge bg-success">Entrada</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Salida</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ movimiento.cantidad }}</td>
+                            <td>{{ movimiento.fecha }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                No hay movimientos registrados.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="stock-bajo" class="card dashboard-card">
+            <div class="card-body">
+                <h4>Productos con stock bajo</h4>
+
+                <table class="table table-hover align-middle mt-3">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Stock actual</th>
+                            <th>Stock mínimo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for producto in productos_stock_bajo %}
+                        <tr>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.categoria.nombre }}</td>
+                            <td>{{ producto.stock }}</td>
+                            <td>{{ producto.stock_minimo }}</td>
+                            <td>
+                                <span class="badge bg-danger">Bajo</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                No hay productos con stock bajo.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h4>Acciones rápidas</h4>
+
+                <a href="{% url 'crear_producto' %}" class="btn btn-primary rounded-3 w-100 mb-2">
+                    Nuevo producto
+                </a>
+
+                <a href="{% url 'crear_entrada' %}" class="btn btn-success rounded-3 w-100 mb-2">
+                    Nueva entrada
+                </a>
+
+                <a href="{% url 'crear_salida' %}" class="btn btn-warning rounded-3 w-100 mb-2">
+                    Nueva salida
+                </a>
+
+                <a href="{% url 'reportes' %}" class="btn btn-secondary rounded-3 w-100">
+                    Ver reportes
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    const ctx = document.getElementById('movimientosChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Entradas', 'Salidas'],
+            datasets: [{
+                label: 'Cantidad de movimientos',
+                data: [
+                    parseInt("{{ total_entradas }}"),
+                    parseInt("{{ total_salidas }}")
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

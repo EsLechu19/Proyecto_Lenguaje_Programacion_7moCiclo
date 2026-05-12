@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Movimiento - StockWise{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1>{{ titulo|default:"Registrar movimiento" }}</h1>
+    <p class="text-muted">Registra una entrada o salida de productos.</p>
+</div>
+
+{% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+{% endif %}
+
+<div class="card dashboard-card">
+    <div class="card-body">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary rounded-3">
+                Guardar movimiento
+            </button>
+
+            <a href="{% url 'lista_movimientos' %}" class="btn btn-secondary rounded-3">
+                Cancelar
+            </a>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
