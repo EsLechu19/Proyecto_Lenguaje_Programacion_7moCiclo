@@ -338,3 +338,4 @@ StockWise permitió aplicar conceptos fundamentales de:
 * CRUD y lógica de negocio
 
 El proyecto fue desarrollado con un enfoque escalable y modular, permitiendo futuras mejoras y ampliaciones.
+ 
