@@ -4,19 +4,32 @@ from .forms import ProductoForm
 from django.contrib.auth.decorators import login_required
 from .models import Categoria
 from .forms import CategoriaForm
+from django.core.paginator import Paginator
 
 @login_required(login_url='login')
 def lista_productos(request):
     query = request.GET.get('buscar')
+    categoria_id = request.GET.get('categoria')
+
+    productos = Producto.objects.all()
+    categorias = Categoria.objects.all()
 
     if query:
-        productos = Producto.objects.filter(nombre__icontains=query)
-    else:
-        productos = Producto.objects.all()
+        productos = productos.filter(nombre__icontains=query)
+
+    if categoria_id:
+        productos = productos.filter(categoria_id=categoria_id)
+
+    paginator = Paginator(productos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'productos/lista.html', {
-        'productos': productos,
-        'query': query
+        'productos': page_obj,
+        'page_obj': page_obj,
+        'categorias': categorias,
+        'query': query,
+        'categoria_id': categoria_id
     })
 
 @login_required(login_url='login')

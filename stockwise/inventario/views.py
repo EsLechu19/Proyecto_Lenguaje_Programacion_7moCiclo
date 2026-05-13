@@ -2,13 +2,30 @@ from django.shortcuts import render, redirect
 from .models import MovimientoStock
 from .forms import MovimientoStockForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 @login_required(login_url='login')
 def lista_movimientos(request):
+    tipo = request.GET.get('tipo')
+    buscar = request.GET.get('buscar')
+
     movimientos = MovimientoStock.objects.order_by('-fecha')
 
+    if tipo:
+        movimientos = movimientos.filter(tipo=tipo)
+
+    if buscar:
+        movimientos = movimientos.filter(producto__nombre__icontains=buscar)
+
+    paginator = Paginator(movimientos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'inventario/lista.html', {
-        'movimientos': movimientos
+        'movimientos': page_obj,
+        'page_obj': page_obj,
+        'tipo': tipo,
+        'buscar': buscar,
     })
 
 @login_required(login_url='login')
@@ -56,6 +73,7 @@ def crear_entrada(request):
         if form.is_valid():
             movimiento = form.save(commit=False)
             movimiento.tipo = 'ENTRADA'
+            movimiento.usuario = request.user
             movimiento.save()
 
             producto = movimiento.producto
@@ -80,6 +98,7 @@ def crear_salida(request):
         if form.is_valid():
             movimiento = form.save(commit=False)
             movimiento.tipo = 'SALIDA'
+            movimiento.usuario = request.user
 
             producto = movimiento.producto
 

@@ -23,6 +23,41 @@
     </div>
 </div>
 
+<form method="GET" class="mb-4">
+    <div class="row g-2">
+
+        <div class="col-md-5">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por producto..."
+                value="{{ buscar|default:'' }}">
+        </div>
+
+        <div class="col-md-4">
+            <select name="tipo" class="form-select">
+                <option value="">Todos los movimientos</option>
+
+                <option value="ENTRADA" {% if tipo == "ENTRADA" %}selected{% endif %}>
+    Entradas
+</option>
+
+<option value="SALIDA" {% if tipo == "SALIDA" %}selected{% endif %}>
+    Salidas
+</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                Filtrar
+            </button>
+
+            <a href="{% url 'lista_movimientos' %}" class="btn btn-secondary">
+                Limpiar
+            </a>
+        </div>
+
+    </div>
+</form>
+
 <div class="card dashboard-card">
     <div class="card-body">
 
@@ -33,6 +68,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Descripción</th>
+                    <th>Usuario</th>
                     <th>Fecha</th>
                 </tr>
             </thead>
@@ -44,14 +80,21 @@
 
                     <td>
                         {% if movimiento.tipo == 'ENTRADA' %}
-                            <span class="badge bg-success">Entrada</span>
+                        <span class="badge bg-success">Entrada</span>
                         {% else %}
-                            <span class="badge bg-danger">Salida</span>
+                        <span class="badge bg-danger">Salida</span>
                         {% endif %}
                     </td>
 
                     <td>{{ movimiento.cantidad }}</td>
                     <td>{{ movimiento.descripcion }}</td>
+                    <td>
+                        {% if movimiento.usuario %}
+                        {{ movimiento.usuario.username }}
+                        {% else %}
+                        Sin usuario
+                        {% endif %}
+                    </td>
                     <td>{{ movimiento.fecha }}</td>
                 </tr>
                 {% empty %}
@@ -66,5 +109,35 @@
 
     </div>
 </div>
+
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?page={{ page_obj.previous_page_number }}&tipo={{ tipo|default:'' }}&buscar={{ buscar|default:'' }}">
+                Anterior
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?page={{ page_obj.next_page_number }}&tipo={{ tipo|default:'' }}&buscar={{ buscar|default:'' }}">
+                Siguiente
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
 
 {% endblock %}

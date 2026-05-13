@@ -13,105 +13,94 @@
 
     <div class="col-md-3">
         <div class="card dashboard-card h-100">
-            <div class="card-body">
-                <h6>Productos</h6>
-                <h2>{{ total_productos }}</h2>
-                <a href="{% url 'lista_productos' %}">Ver productos</a>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Productos</h6>
+                    <h2 class="fw-bold">{{ total_productos }}</h2>
+                    <a href="{% url 'lista_productos' %}" class="small">Ver productos</a>
+                </div>
+
+                <div class="kpi-icon bg-primary-subtle text-primary">
+                    <i class="fa-solid fa-box"></i>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card dashboard-card h-100">
-            <div class="card-body">
-                <h6>Entradas</h6>
-                <h2>{{ total_entradas }}</h2>
-                <a href="{% url 'lista_movimientos' %}">Ver movimientos</a>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Entradas</h6>
+                    <h2 class="fw-bold">{{ total_entradas }}</h2>
+                    <a href="{% url 'crear_entrada' %}" class="small">Nueva entrada</a>
+                </div>
+
+                <div class="kpi-icon bg-success-subtle text-success">
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card dashboard-card h-100">
-            <div class="card-body">
-                <h6>Salidas</h6>
-                <h2>{{ total_salidas }}</h2>
-                <a href="{% url 'lista_movimientos' %}">Ver salidas</a>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Salidas</h6>
+                    <h2 class="fw-bold">{{ total_salidas }}</h2>
+                    <a href="{% url 'crear_salida' %}" class="small">Nueva salida</a>
+                </div>
+
+                <div class="kpi-icon bg-warning-subtle text-warning">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card dashboard-card h-100">
-            <div class="card-body">
-                <h6>Alertas de Stock</h6>
-                <h2 class="text-danger">{{ productos_stock_bajo|length }}</h2>
-                <a href="#stock-bajo" class="text-danger">Ver alertas</a>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Stock bajo</h6>
+                    <h2 class="fw-bold text-danger">{{ productos_stock_bajo|length }}</h2>
+                    <a href="#stock-bajo" class="small text-danger">Ver alertas</a>
+                </div>
+
+                <div class="kpi-icon bg-danger-subtle text-danger">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
             </div>
         </div>
     </div>
 
 </div>
 
-<div class="card dashboard-card mb-4">
-    <div class="card-body">
-        <h4 class="mb-4">Movimientos de inventario</h4>
+<div class="row g-4 mb-4">
 
-        <div style="height: 280px;">
-            <canvas id="movimientosChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4">
-
-    <div class="col-md-8">
-
-        <div class="card dashboard-card mb-4">
+    <div class="col-md-5">
+        <div class="card dashboard-card h-100">
             <div class="card-body">
-                <h4>Últimos movimientos</h4>
+                <h4 class="mb-3">Top productos críticos</h4>
 
-                <table class="table table-hover align-middle mt-3">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Tipo</th>
-                            <th>Cantidad</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
+                <small class="text-muted">
+                    Comparación entre stock actual y stock mínimo
+                </small>
 
-                    <tbody>
-                        {% for movimiento in ultimos_movimientos %}
-                        <tr>
-                            <td>{{ movimiento.producto.nombre }}</td>
-                            <td>
-                                {% if movimiento.tipo == 'ENTRADA' %}
-                                    <span class="badge bg-success">Entrada</span>
-                                {% else %}
-                                    <span class="badge bg-danger">Salida</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ movimiento.cantidad }}</td>
-                            <td>{{ movimiento.fecha }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center">
-                                No hay movimientos registrados.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="chart-pie-container">
+                    <canvas id="categoriasChart"></canvas>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div id="stock-bajo" class="card dashboard-card">
+    <div class="col-md-7">
+        <div id="stock-bajo" class="card dashboard-card h-100">
             <div class="card-body">
-                <h4>Productos con stock bajo</h4>
+                <h4 class="mb-3">Productos con stock bajo</h4>
 
-                <table class="table table-hover align-middle mt-3">
+                <table class="table table-hover align-middle">
                     <thead>
                         <tr>
                             <th>Producto</th>
@@ -142,29 +131,88 @@
                         {% endfor %}
                     </tbody>
                 </table>
+
             </div>
         </div>
+    </div>
 
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-8">
+        <div class="card dashboard-card h-100">
+            <div class="card-body">
+                <h4 class="mb-3">Últimos movimientos</h4>
+
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for movimiento in ultimos_movimientos %}
+                        <tr>
+                            <td>{{ movimiento.producto.nombre }}</td>
+                            <td>
+                                {% if movimiento.tipo == 'ENTRADA' %}
+                                <span class="badge bg-success">Entrada</span>
+                                {% else %}
+                                <span class="badge bg-danger">Salida</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ movimiento.cantidad }}</td>
+                            <td>
+    {% if movimiento.usuario %}
+        {{ movimiento.usuario.username }}
+    {% else %}
+        Sin usuario
+    {% endif %}
+</td>
+                            <td>{{ movimiento.fecha }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                No hay movimientos registrados.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </div>
 
     <div class="col-md-4">
-        <div class="card dashboard-card">
+        <div class="card dashboard-card h-100">
             <div class="card-body">
-                <h4>Acciones rápidas</h4>
+                <h4 class="mb-3">Acciones rápidas</h4>
 
                 <a href="{% url 'crear_producto' %}" class="btn btn-primary rounded-3 w-100 mb-2">
+                    <i class="fa-solid fa-plus me-2"></i>
                     Nuevo producto
                 </a>
 
                 <a href="{% url 'crear_entrada' %}" class="btn btn-success rounded-3 w-100 mb-2">
+                    <i class="fa-solid fa-arrow-down me-2"></i>
                     Nueva entrada
                 </a>
 
                 <a href="{% url 'crear_salida' %}" class="btn btn-warning rounded-3 w-100 mb-2">
+                    <i class="fa-solid fa-arrow-up me-2"></i>
                     Nueva salida
                 </a>
 
                 <a href="{% url 'reportes' %}" class="btn btn-secondary rounded-3 w-100">
+                    <i class="fa-solid fa-chart-column me-2"></i>
                     Ver reportes
                 </a>
             </div>
@@ -177,25 +225,79 @@
 
 {% block scripts %}
 
-<script>
-    const ctx = document.getElementById('movimientosChart');
+{{ nombres_productos|json_script:"productos-data" }}
+{{ stock_actual|json_script:"stock-actual-data" }}
+{{ stock_minimo|json_script:"stock-minimo-data" }}
 
-    new Chart(ctx, {
+<script>
+
+    const productosLabels = JSON.parse(
+        document.getElementById('productos-data').textContent
+    );
+
+    const stockActual = JSON.parse(
+        document.getElementById('stock-actual-data').textContent
+    );
+
+    const stockMinimo = JSON.parse(
+        document.getElementById('stock-minimo-data').textContent
+    );
+
+    const categoriasCtx = document.getElementById('categoriasChart');
+
+    new Chart(categoriasCtx, {
+
         type: 'bar',
+
         data: {
-            labels: ['Entradas', 'Salidas'],
-            datasets: [{
-                label: 'Cantidad de movimientos',
-                data: [
-                    parseInt("{{ total_entradas }}"),
-                    parseInt("{{ total_salidas }}")
-                ],
-                borderWidth: 1
-            }]
+
+            labels: productosLabels,
+
+            datasets: [
+
+                {
+                    label: 'Stock actual',
+
+                    data: stockActual,
+
+                    backgroundColor: 'rgba(37, 99, 235, 0.6)',
+
+                    borderColor: 'rgba(37, 99, 235, 1)',
+
+                    borderWidth: 2,
+
+                    borderRadius: 8
+                },
+
+                {
+                    label: 'Stock mínimo',
+
+                    data: stockMinimo,
+
+                    backgroundColor: 'rgba(220, 53, 69, 0.5)',
+
+                    borderColor: 'rgba(220, 53, 69, 1)',
+
+                    borderWidth: 2,
+
+                    borderRadius: 8
+                }
+
+            ]
         },
+
         options: {
+
             responsive: true,
+
             maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            },
+
             scales: {
                 y: {
                     beginAtZero: true
@@ -203,6 +305,7 @@
             }
         }
     });
+
 </script>
 
 {% endblock %}
