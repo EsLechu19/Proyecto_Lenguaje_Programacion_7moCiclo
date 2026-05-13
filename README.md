@@ -268,25 +268,29 @@ Visualizar estadísticas, alertas y exportar información del inventario.
 
 ## Login
 
-*Agregar captura del login aquí.*
+<img width="1901" height="907" alt="image" src="https://github.com/user-attachments/assets/47b980d3-5043-4d16-b026-b7e4b1e86865" />
+
 
 ---
 
 ## Dashboard
 
-*Agregar captura del dashboard aquí.*
+<img width="1887" height="910" alt="image" src="https://github.com/user-attachments/assets/a4f23d2b-c499-4493-91bd-c87779d2f384" />
+
 
 ---
 
 ## Productos
 
-*Agregar captura del módulo productos aquí.*
+<img width="1906" height="908" alt="image" src="https://github.com/user-attachments/assets/489a4e2a-ef0e-4452-82b7-68d48b03e72f" />
+
 
 ---
 
 ## Reportes
 
-*Agregar captura del módulo reportes aquí.*
+<img width="1885" height="906" alt="image" src="https://github.com/user-attachments/assets/c0afa116-5930-434d-b6c4-fc14ddce16e1" />
+
 
 ---
 
