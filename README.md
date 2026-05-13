@@ -254,11 +254,13 @@ Registrar:
 
 Las entradas y salidas modifican automáticamente el stock.
 
+Cada movimiento queda asociado al usuario autenticado.
+
 ---
 
 ## 5. Consultar reportes
 
-Visualizar estadísticas y alertas del inventario.
+Visualizar estadísticas, alertas y exportar información del inventario.
 
 ---
 
@@ -292,14 +294,15 @@ Visualizar estadísticas y alertas del inventario.
 
 El proyecto fue diseñado con posibilidad de escalabilidad. Algunas mejoras futuras podrían ser:
 
-* Exportación PDF y Excel
-* Gestión de proveedores
-* Sistema multiusuario
-* Notificaciones automáticas
-* Integración con APIs
-* Base de datos PostgreSQL
-* Dashboard avanzado con más métricas
-* Despliegue cloud profesional
+* Sidebar colapsable
+* Modo oscuro
+* Dashboard analítico avanzado
+* Integración con PostgreSQL
+* API REST con Django REST Framework
+* Sistema de roles y permisos
+* Notificaciones en tiempo real
+* Integración con APIs externas
+* Sistema multiempresa
 
 ---
 
@@ -319,8 +322,12 @@ Proyecto funcional con:
 * Dashboard interactivo
 * CRUD completo
 * Sistema de autenticación
-* Reportes
+* Reportes PDF y Excel
+* Filtros y paginación
 * Control automático de inventario
+* Trazabilidad de movimientos por usuario
+* Dashboard analítico
+* Deploy en Render
 * Interfaz moderna responsive
 
 ---
@@ -336,6 +343,8 @@ StockWise permitió aplicar conceptos fundamentales de:
 * Diseño frontend responsive
 * Seguridad web básica
 * CRUD y lógica de negocio
+* Visualización de datos
+* Deploy cloud
 
 El proyecto fue desarrollado con un enfoque escalable y modular, permitiendo futuras mejoras y ampliaciones.
  
